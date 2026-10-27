@@ -1,4 +1,4 @@
-package com.example.mastermartini_grupo2.ui
+package com.example.mastermartini_grupo2.ui.screens
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
