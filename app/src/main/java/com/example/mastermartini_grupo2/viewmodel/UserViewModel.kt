@@ -36,4 +36,42 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 user.tamanoNegocio.isNotBlank() &&
                 user.preferenciasContenido.isNotBlank()
     }
+
+    fun getValidationErrors(user: User): Set<String> {
+        val errors = mutableSetOf<String>()
+
+        if (user.nombre.isBlank()) {
+            errors.add("nombre")
+        }
+
+        if (user.correo.isBlank()) {
+            errors.add("correo")
+        }
+
+        if (user.telefono.isBlank()) {
+            errors.add("telefono")
+        }
+
+        if (user.direccion.isBlank()) {
+            errors.add("direccion")
+        }
+
+        if (user.rutEmpresa.isBlank()) {
+            errors.add("rutEmpresa")
+        }
+
+        if (user.tipoNegocio.isBlank()) {
+            errors.add("tipoNegocio")
+        }
+
+        if (user.tamanoNegocio.isBlank()) {
+            errors.add("tamanoNegocio")
+        }
+
+        if (user.preferenciasContenido.isBlank()) {
+            errors.add("preferenciasContenido")
+        }
+
+        return errors
+    }
 }
