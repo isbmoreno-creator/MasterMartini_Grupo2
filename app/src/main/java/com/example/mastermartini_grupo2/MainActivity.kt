@@ -57,7 +57,11 @@ fun AppNavigation() {
         }
 
         composable("register") {
-            RegisterScreen()
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable("profile") {

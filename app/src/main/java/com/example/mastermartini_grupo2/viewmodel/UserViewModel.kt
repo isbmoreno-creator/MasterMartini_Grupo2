@@ -27,14 +27,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun validateUser(user: User): Boolean {
-        return user.nombre.isNotBlank() &&
-                user.correo.isNotBlank() &&
-                user.telefono.isNotBlank() &&
-                user.direccion.isNotBlank() &&
-                user.rutEmpresa.isNotBlank() &&
-                user.tipoNegocio.isNotBlank() &&
-                user.tamanoNegocio.isNotBlank() &&
-                user.preferenciasContenido.isNotBlank()
+        return getValidationErrors(user).isEmpty()
     }
 
     fun getValidationErrors(user: User): Set<String> {
@@ -44,11 +37,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             errors.add("nombre")
         }
 
-        if (user.correo.isBlank()) {
+        if (user.correo.isBlank() || !isValidEmail(user.correo)) {
             errors.add("correo")
         }
 
-        if (user.telefono.isBlank()) {
+        if (user.telefono.isBlank() || !isValidTelefono(user.telefono)) {
             errors.add("telefono")
         }
 
@@ -56,7 +49,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             errors.add("direccion")
         }
 
-        if (user.rutEmpresa.isBlank()) {
+        if (user.rutEmpresa.isBlank() || !isValidRut(user.rutEmpresa)) {
             errors.add("rutEmpresa")
         }
 
@@ -73,5 +66,53 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         return errors
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS
+            .matcher(email)
+            .matches()
+    }
+
+    private fun isValidTelefono(telefono: String): Boolean {
+        return telefono.matches(Regex("^(9\\d{8}|\\+569\\d{8})$"))
+    }
+
+    private fun isValidRut(rut: String): Boolean {
+
+        val rutLimpio = rut
+            .replace(".", "")
+            .replace("-", "")
+            .uppercase()
+
+        if (!rutLimpio.matches(Regex("\\d{7,8}[0-9K]"))) {
+            return false
+        }
+
+        val cuerpo = rutLimpio.dropLast(1)
+        val digitoVerificador = rutLimpio.last()
+
+        var suma = 0
+        var multiplicador = 2
+
+        for (digito in cuerpo.reversed()) {
+            suma += digito.digitToInt() * multiplicador
+
+            multiplicador++
+
+            if (multiplicador > 7) {
+                multiplicador = 2
+            }
+        }
+
+        val resto = 11 - (suma % 11)
+
+        val digitoEsperado = when (resto) {
+            11 -> '0'
+            10 -> 'K'
+            else -> resto.digitToChar()
+        }
+
+        return digitoVerificador == digitoEsperado
     }
 }
