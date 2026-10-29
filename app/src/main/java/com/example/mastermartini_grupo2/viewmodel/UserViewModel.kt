@@ -1,18 +1,29 @@
 package com.example.mastermartini_grupo2.viewmodel
-import androidx.lifecycle.ViewModel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mastermartini_grupo2.model.User
 import com.example.mastermartini_grupo2.repository.UserRepository
+import kotlinx.coroutines.launch
 
-class UserViewModel : ViewModel(){
+class UserViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = UserRepository()
+    private val repository = UserRepository(application)
 
     fun addUser(user: User) {
-        repository.addUser(user)
+        viewModelScope.launch {
+            repository.addUser(user)
+        }
+    }
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            repository.updateUser(user)
+        }
     }
 
-    fun getUsers(): List<User> {
-        return repository.getUsers()
+    suspend fun getUser(): User? {
+        return repository.getUser()
     }
 
     fun validateUser(user: User): Boolean {

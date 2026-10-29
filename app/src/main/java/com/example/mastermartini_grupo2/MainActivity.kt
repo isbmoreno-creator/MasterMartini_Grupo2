@@ -4,37 +4,69 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.mastermartini_grupo2.ui.theme.MasterMartini_Grupo2Theme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.mastermartini_grupo2.ui.screens.HomeScreen
+import com.example.mastermartini_grupo2.ui.screens.ProfileScreen
 import com.example.mastermartini_grupo2.ui.screens.RegisterScreen
+import com.example.mastermartini_grupo2.ui.theme.MasterMartini_Grupo2Theme
+import com.example.mastermartini_grupo2.ui.screens.PreferencesScreen
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             MasterMartini_Grupo2Theme {
-                RegisterScreen()
+                AppNavigation()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun AppNavigation() {
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MasterMartini_Grupo2Theme {
-        Greeting("Android")
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+
+        composable("home") {
+            HomeScreen(
+                onRegisterClick = {
+                    navController.navigate("register")
+                },
+                onProfileClick = {
+                    navController.navigate("profile")
+                }
+            )
+        }
+        composable("preferences") {
+            PreferencesScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable("register") {
+            RegisterScreen()
+        }
+
+        composable("profile") {
+            ProfileScreen(
+                onPreferencesClick = {
+                    navController.navigate("preferences")
+                }
+            )
+        }
+
     }
 }
