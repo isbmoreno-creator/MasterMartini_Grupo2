@@ -50,7 +50,8 @@ fun AppNavigation() {
         }
         composable("preferences") {
             PreferencesScreen(
-                onBackClick = {
+                onSaveSuccess = {
+                    navController.popBackStack()
                     navController.popBackStack()
                 }
             )
@@ -60,6 +61,9 @@ fun AppNavigation() {
             RegisterScreen(
                 onRegisterSuccess = {
                     navController.popBackStack()
+                },
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -68,6 +72,9 @@ fun AppNavigation() {
             ProfileScreen(
                 onPreferencesClick = {
                     navController.navigate("preferences")
+                },
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }
