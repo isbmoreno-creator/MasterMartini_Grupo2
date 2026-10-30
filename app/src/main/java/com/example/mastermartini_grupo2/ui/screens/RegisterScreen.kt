@@ -35,7 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mastermartini_grupo2.model.User
 import com.example.mastermartini_grupo2.viewmodel.UserViewModel
-
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
 private val VerdeMasterMartini = Color(0xFF005B4F)
 private val DoradoMasterMartini = Color(0xFFC9A500)
 
@@ -94,30 +100,53 @@ fun RegisterScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
 
-                Text(
-                    text = "¡Registro exitoso!",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = "Tus datos fueron guardados correctamente.",
-                    fontSize = 16.sp
-                )
-
-                Button(
-                    onClick = onRegisterSuccess,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = VerdeMasterMartini
-                    )
+                AnimatedVisibility(
+                    visible = registroExitoso.value,
+                    enter = fadeIn() + scaleIn()
                 ) {
-                    Text("Volver al inicio")
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = "Registro exitoso",
+                            tint = VerdeMasterMartini,
+                            modifier = Modifier.size(72.dp)
+                        )
+
+                        Text(
+                            text = "¡Registro exitoso!",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Text(
+                            text = "Tus datos fueron guardados correctamente.",
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Button(
+                            onClick = onRegisterSuccess,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = VerdeMasterMartini
+                            )
+                        ) {
+                            Text("Volver al inicio")
+                        }
+                    }
                 }
-            }
+
+        }
 
         } else {
 
