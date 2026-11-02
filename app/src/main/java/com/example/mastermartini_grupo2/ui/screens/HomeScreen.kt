@@ -34,11 +34,14 @@ import com.example.mastermartini_grupo2.R
 private val VerdeMasterMartini = Color(0xFF005B4F)
 private val DoradoMasterMartini = Color(0xFFC9A500)
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onRegisterClick: () -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -74,9 +77,7 @@ fun HomeScreen(
                 modifier = Modifier.size(220.dp)
             )
 
-            Spacer(
-                modifier = Modifier.height(24.dp)
-            )
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = "Master Martini Panaderia & Pasteleria",
@@ -85,9 +86,7 @@ fun HomeScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+            Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = "Descubre una linea completa de insumos para tu negocio.",
@@ -95,10 +94,9 @@ fun HomeScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(
-                modifier = Modifier.height(32.dp)
-            )
+            Spacer(modifier = Modifier.height(32.dp))
 
+            // Botón Registrarse
             Button(
                 onClick = onRegisterClick,
                 modifier = Modifier.fillMaxWidth(),
@@ -112,19 +110,16 @@ fun HomeScreen(
                     contentDescription = "Registrarse"
                 )
 
-                Spacer(
-                    modifier = Modifier.size(8.dp)
-                )
+                Spacer(modifier = Modifier.size(8.dp))
 
                 Text("Registrarse")
             }
 
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
+            // Botón Inicio de sesión
             Button(
-                onClick = onProfileClick,
+                onClick = onLoginClick,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = VerdeMasterMartini,
@@ -133,15 +128,16 @@ fun HomeScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = "Mi perfil"
+                    contentDescription = "Inicio de sesión"
                 )
 
-                Spacer(
-                    modifier = Modifier.size(8.dp)
-                )
+                Spacer(modifier = Modifier.size(8.dp))
 
-                Text("Mi perfil")
+                Text("Inicio de sesión")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
         }
     }
 }
