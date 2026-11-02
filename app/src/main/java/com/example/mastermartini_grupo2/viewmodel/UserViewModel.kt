@@ -115,4 +115,20 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
         return digitoVerificador == digitoEsperado
     }
+
+    fun validarLogin(
+        correo: String,
+        contrasena: String,
+        onResult: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            val usuario = repository.getUser()
+
+            val resultado = usuario != null &&
+                    usuario.correo.equals(correo.trim(), ignoreCase = true) &&
+                    usuario.correo.equals(contrasena.trim(), ignoreCase = true)
+
+            onResult(resultado)
+        }
+    }
 }

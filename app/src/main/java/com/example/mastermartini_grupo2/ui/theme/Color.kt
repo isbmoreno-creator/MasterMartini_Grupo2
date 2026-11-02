@@ -2,6 +2,9 @@ package com.example.mastermartini_grupo2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+
+val VerdeMasterMartini = Color(0xFF005B4F)
+val DoradoMasterMartini = Color(0xFFC9A500)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
