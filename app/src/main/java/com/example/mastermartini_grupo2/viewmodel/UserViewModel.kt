@@ -16,6 +16,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             repository.addUser(user)
         }
     }
+
     fun updateUser(user: User) {
         viewModelScope.launch {
             repository.updateUser(user)
@@ -75,7 +76,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun isValidTelefono(telefono: String): Boolean {
-        return telefono.matches(Regex("^(9\\d{8}|\\+569\\d{8})$"))
+        return telefono.matches(
+            Regex("^(9\\d{8}|\\+569\\d{8})$")
+        )
     }
 
     private fun isValidRut(rut: String): Boolean {
@@ -116,17 +119,44 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         return digitoVerificador == digitoEsperado
     }
 
+    // Validación del formulario de inicio de sesión.
+    // La lógica de validación queda centralizada en el ViewModel.
+    fun getLoginValidationErrors(
+        correo: String,
+        contrasena: String
+    ): Set<String> {
+
+        val errors = mutableSetOf<String>()
+
+        if (correo.isBlank()) {
+            errors.add("correo")
+        }
+
+        if (contrasena.isBlank()) {
+            errors.add("contrasena")
+        }
+
+        return errors
+    }
+
     fun validarLogin(
         correo: String,
         contrasena: String,
         onResult: (Boolean) -> Unit
     ) {
         viewModelScope.launch {
+
             val usuario = repository.getUser()
 
             val resultado = usuario != null &&
-                    usuario.correo.equals(correo.trim(), ignoreCase = true) &&
-                    usuario.correo.equals(contrasena.trim(), ignoreCase = true)
+                    usuario.correo.equals(
+                        correo.trim(),
+                        ignoreCase = true
+                    ) &&
+                    usuario.correo.equals(
+                        contrasena.trim(),
+                        ignoreCase = true
+                    )
 
             onResult(resultado)
         }

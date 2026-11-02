@@ -1,8 +1,5 @@
 package com.example.mastermartini_grupo2.viewmodel
 
-
-
-
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -43,5 +40,26 @@ class RecipeViewModel(application: Application) :
             repository.deleteRecipe(id)
             loadRecipes()
         }
+    }
+
+    // Validación del formulario para agregar recetas.
+    // La lógica de validación queda centralizada en el ViewModel.
+    fun getRecipeValidationErrors(recipe: Recipe): Set<String> {
+
+        val errors = mutableSetOf<String>()
+
+        if (recipe.name.isBlank()) {
+            errors.add("nombre")
+        }
+
+        if (recipe.description.isBlank()) {
+            errors.add("descripcion")
+        }
+
+        if (recipe.estimatedTime.isBlank()) {
+            errors.add("tiempo")
+        }
+
+        return errors
     }
 }

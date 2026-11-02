@@ -1,4 +1,3 @@
-
 package com.example.mastermartini_grupo2.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +36,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mastermartini_grupo2.viewmodel.UserViewModel
 
 private val VerdeMasterMartini = Color(0xFF005B4F)
 private val DoradoMasterMartini = Color(0xFFC9A500)
@@ -48,6 +49,8 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onBackClick: () -> Unit
 ) {
+
+    val userViewModel: UserViewModel = viewModel()
 
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
@@ -170,10 +173,20 @@ fun LoginScreen(
             // Botón iniciar sesión
             Button(
                 onClick = {
-                    if (correo.isBlank() || contrasena.isBlank()) {
+
+                    val errores = userViewModel.getLoginValidationErrors(
+                        correo,
+                        contrasena
+                    )
+
+                    if (errores.isNotEmpty()) {
+
                         mensajeError = "Completa todos los campos."
+
                     } else {
+
                         onLoginClick(correo, contrasena) { resultado ->
+
                             if (resultado) {
                                 onLoginSuccess()
                             } else {

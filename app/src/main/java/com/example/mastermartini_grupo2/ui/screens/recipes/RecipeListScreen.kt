@@ -24,7 +24,6 @@ import com.example.mastermartini_grupo2.viewmodel.RecipeViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeListScreen(
@@ -185,7 +184,6 @@ fun RecipeListScreen(
         AddRecipeDialog(
 
             onAgregar = { newRecipe ->
-
                 recipeViewModel.addRecipe(newRecipe)
 
                 showDialog = false
@@ -193,6 +191,10 @@ fun RecipeListScreen(
 
             onCerrar = {
                 showDialog = false
+            },
+
+            onValidate = { recipe ->
+                recipeViewModel.getRecipeValidationErrors(recipe)
             }
         )
     }

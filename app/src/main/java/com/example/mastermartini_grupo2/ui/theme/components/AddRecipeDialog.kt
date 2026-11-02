@@ -1,6 +1,5 @@
 package com.example.mastermartini_grupo2.ui.theme.components
 
-
 import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -41,7 +40,8 @@ private val DoradoRecipe = Color(0xFFC9A500)
 @Composable
 fun AddRecipeDialog(
     onAgregar: (Recipe) -> Unit,
-    onCerrar: () -> Unit
+    onCerrar: () -> Unit,
+    onValidate: (Recipe) -> Set<String>
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -56,7 +56,6 @@ fun AddRecipeDialog(
     val selectorImagen = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-
         if (uri != null) {
             guardando = true
 
@@ -85,15 +84,23 @@ fun AddRecipeDialog(
             ) {
                 OutlinedTextField(
                     value = nombre,
-                    onValueChange = { nombre = it },
-                    label = { Text("Nombre de la receta") },
+                    onValueChange = {
+                        nombre = it
+                        error = ""
+                    },
+                    label = {
+                        Text("Nombre de la receta")
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
 
                 OutlinedTextField(
                     value = descripcion,
-                    onValueChange = { descripcion = it },
+                    onValueChange = {
+                        descripcion = it
+                        error = ""
+                    },
                     label = {
                         Text("Ingredientes y preparación")
                     },
@@ -104,9 +111,16 @@ fun AddRecipeDialog(
 
                 OutlinedTextField(
                     value = tiempo,
-                    onValueChange = { tiempo = it },
-                    label = { Text("Tiempo estimado") },
-                    placeholder = { Text("Ej: 45 minutos") },
+                    onValueChange = {
+                        tiempo = it
+                        error = ""
+                    },
+                    label = {
+                        Text("Tiempo estimado")
+                    },
+                    placeholder = {
+                        Text("Ej: 45 minutos")
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -148,32 +162,35 @@ fun AddRecipeDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    when {
-                        nombre.isBlank() -> {
-                            error = "Ingresa el nombre de la receta."
-                        }
+                    if (guardando) {
+                        error = "Espera a que termine de cargar la fotografía."
+                    } else {
+                        val nuevaReceta = Recipe(
+                            name = nombre.trim(),
+                            description = descripcion.trim(),
+                            estimatedTime = tiempo.trim(),
+                            imagePath = imagenPath
+                        )
 
-                        descripcion.isBlank() -> {
-                            error = "Ingresa la descripción."
-                        }
+                        val errores = onValidate(nuevaReceta)
 
-                        tiempo.isBlank() -> {
-                            error = "Ingresa el tiempo estimado."
-                        }
+                        when {
+                            errores.contains("nombre") -> {
+                                error = "Ingresa el nombre de la receta."
+                            }
 
-                        guardando -> {
-                            error = "Espera a que termine de cargar la fotografía."
-                        }
+                            errores.contains("descripcion") -> {
+                                error = "Ingresa la descripción."
+                            }
 
-                        else -> {
-                            val nuevaReceta = Recipe(
-                                name = nombre.trim(),
-                                description = descripcion.trim(),
-                                estimatedTime = tiempo.trim(),
-                                imagePath = imagenPath
-                            )
+                            errores.contains("tiempo") -> {
+                                error = "Ingresa el tiempo estimado."
+                            }
 
-                            onAgregar(nuevaReceta)
+                            else -> {
+                                error = ""
+                                onAgregar(nuevaReceta)
+                            }
                         }
                     }
                 },
