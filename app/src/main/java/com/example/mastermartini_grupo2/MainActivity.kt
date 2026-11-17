@@ -101,15 +101,20 @@ fun AppNavigation() {
                 }
             )
         }
-
-
-        composable("profile") {
+        composable(route = "profile") {
             ProfileScreen(
                 onPreferencesClick = {
                     navController.navigate("preferences")
                 },
                 onBackClick = {
                     navController.popBackStack()
+                },
+                onLogoutClick = {
+                    navController.navigate("login") {
+                        popUpTo("main") {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

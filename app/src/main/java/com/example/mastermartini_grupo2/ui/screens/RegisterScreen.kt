@@ -42,6 +42,10 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Lock
 private val VerdeMasterMartini = Color(0xFF005B4F)
 private val DoradoMasterMartini = Color(0xFFC9A500)
 
@@ -64,6 +68,7 @@ fun RegisterScreen(
 
     val errores = remember { mutableStateOf(setOf<String>()) }
     val registroExitoso = remember { mutableStateOf(false) }
+    var contrasena by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -213,6 +218,19 @@ fun RegisterScreen(
                         }
                     }
                 )
+                TextField(
+                    value = contrasena,
+                    onValueChange = { contrasena = it },
+                    label = { Text("Contraseña") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = "Contraseña"
+                        )
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 TextField(
                     value = telefono.value,
@@ -339,7 +357,8 @@ fun RegisterScreen(
                             rutEmpresa = rutEmpresa.value,
                             tipoNegocio = tipoNegocio.value,
                             tamanoNegocio = tamanoNegocio.value,
-                            preferenciasContenido = preferenciasContenido.value
+                            preferenciasContenido = preferenciasContenido.value,
+                            contrasena = contrasena
                         )
 
                         val validationErrors =
