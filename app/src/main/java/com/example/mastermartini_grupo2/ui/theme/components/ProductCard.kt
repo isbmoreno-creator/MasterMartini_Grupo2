@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -17,15 +18,13 @@ import com.example.mastermartini_grupo2.model.Product
 import com.example.mastermartini_grupo2.ui.theme.VerdeMasterMartini
 import com.example.mastermartini_grupo2.ui.theme.DoradoMasterMartini
 import coil.compose.AsyncImage
-import androidx.compose.material3.Button
 
 @Composable
 fun ProductCard(
     product: Product,
     onDelete: () -> Unit,
     onEdit: () -> Unit
-){
-
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -36,7 +35,6 @@ fun ProductCard(
             defaultElevation = 4.dp
         )
     ) {
-
         Column {
 
             // Fotografía del producto
@@ -60,6 +58,7 @@ fun ProductCard(
                     fontWeight = FontWeight.Bold,
                     color = VerdeMasterMartini
                 )
+
                 Text(
                     text = "ID: ${product.id}",
                     fontSize = 12.sp,
@@ -88,20 +87,32 @@ fun ProductCard(
                 )
 
                 Spacer(
-                    modifier = Modifier.height(12.dp)
+                    modifier = Modifier.height(8.dp)
                 )
-                Button(
-                    onClick = onEdit,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Editar")
-                }
 
-                Button(
-                    onClick = onDelete,
-                    modifier = Modifier.fillMaxWidth()
+                // Botones como los de Recetas
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text("Eliminar")
+
+                    TextButton(
+                        onClick = onEdit
+                    ) {
+                        Text(
+                            text = "Editar",
+                            color = VerdeMasterMartini
+                        )
+                    }
+
+                    TextButton(
+                        onClick = onDelete
+                    ) {
+                        Text(
+                            text = "Eliminar",
+                            color = Color.Red
+                        )
+                    }
                 }
             }
         }
