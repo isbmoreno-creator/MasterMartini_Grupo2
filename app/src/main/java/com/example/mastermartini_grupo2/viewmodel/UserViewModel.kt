@@ -82,45 +82,41 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun isValidRut(rut: String): Boolean {
-
         val rutLimpio = rut
             .replace(".", "")
             .replace("-", "")
             .uppercase()
 
-        if (!rutLimpio.matches(Regex("\\d{7,8}[0-9K]"))) {
-            return false
-        }
+        if (rutLimpio.length < 2) return false
 
         val cuerpo = rutLimpio.dropLast(1)
-        val digitoVerificador = rutLimpio.last()
+        val dv = rutLimpio.last()
+
+        if (!cuerpo.all { it.isDigit() }) return false
 
         var suma = 0
         var multiplicador = 2
 
-        for (digito in cuerpo.reversed()) {
-            suma += digito.digitToInt() * multiplicador
-
+        for (i in cuerpo.length - 1 downTo 0) {
+            suma += cuerpo[i].digitToInt() * multiplicador
             multiplicador++
 
-            if (multiplicador > 7) {
+            if (multiplicador == 8) {
                 multiplicador = 2
             }
         }
 
         val resto = 11 - (suma % 11)
 
-        val digitoEsperado = when (resto) {
+        val dvEsperado = when (resto) {
             11 -> '0'
             10 -> 'K'
             else -> resto.digitToChar()
         }
 
-        return digitoVerificador == digitoEsperado
+        return dv == dvEsperado
     }
 
-    // Validación del formulario de inicio de sesión.
-    // La lógica de validación queda centralizada en el ViewModel.
     fun getLoginValidationErrors(
         correo: String,
         contrasena: String
@@ -153,10 +149,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                         correo.trim(),
                         ignoreCase = true
                     ) &&
-                    usuario.correo.equals(
-                        contrasena.trim(),
-                        ignoreCase = true
-                    )
+                    usuario.contrasena == contrasena.trim()
 
             onResult(resultado)
         }

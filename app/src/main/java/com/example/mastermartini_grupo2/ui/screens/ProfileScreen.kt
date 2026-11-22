@@ -48,7 +48,9 @@ private val DoradoMasterMartini = Color(0xFFC9A500)
 @Composable
 fun ProfileScreen(
     onPreferencesClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLogoutClick: () -> Unit
+
 ) {
     val userViewModel: UserViewModel = viewModel()
 
@@ -254,6 +256,15 @@ fun ProfileScreen(
                     )
                 ) {
                     Text("Editar preferencias")
+                }
+                Button(
+                    onClick = onLogoutClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    )
+                ) {
+                    Text("Cerrar sesión")
                 }
 
             } else {

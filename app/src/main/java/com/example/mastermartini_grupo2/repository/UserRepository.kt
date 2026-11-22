@@ -20,6 +20,8 @@ class UserRepository(private val context: Context) {
         val TIPO_NEGOCIO = stringPreferencesKey("tipo_negocio")
         val TAMANO_NEGOCIO = stringPreferencesKey("tamano_negocio")
         val PREFERENCIAS = stringPreferencesKey("preferencias")
+
+        private val CONTRASENA = stringPreferencesKey("contrasena")
     }
 
     suspend fun addUser(user: User) {
@@ -32,6 +34,7 @@ class UserRepository(private val context: Context) {
             preferences[TIPO_NEGOCIO] = user.tipoNegocio
             preferences[TAMANO_NEGOCIO] = user.tamanoNegocio
             preferences[PREFERENCIAS] = user.preferenciasContenido
+            preferences[CONTRASENA] = user.contrasena
         }
     }
     suspend fun updateUser(user: User) {
@@ -44,6 +47,7 @@ class UserRepository(private val context: Context) {
             preferences[TIPO_NEGOCIO] = user.tipoNegocio
             preferences[TAMANO_NEGOCIO] = user.tamanoNegocio
             preferences[PREFERENCIAS] = user.preferenciasContenido
+            preferences[CONTRASENA] = user.contrasena
         }
     }
 
@@ -52,6 +56,8 @@ class UserRepository(private val context: Context) {
 
         val nombre = preferences[NOMBRE] ?: return null
         val correo = preferences[CORREO] ?: return null
+        val contrasena = preferences[CONTRASENA] ?: ""
+
 
         return User(
             nombre = nombre,
@@ -61,7 +67,8 @@ class UserRepository(private val context: Context) {
             rutEmpresa = preferences[RUT_EMPRESA] ?: "",
             tipoNegocio = preferences[TIPO_NEGOCIO] ?: "",
             tamanoNegocio = preferences[TAMANO_NEGOCIO] ?: "",
-            preferenciasContenido = preferences[PREFERENCIAS] ?: ""
+            preferenciasContenido = preferences[PREFERENCIAS] ?: "",
+            contrasena = contrasena
         )
     }
 }

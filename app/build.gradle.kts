@@ -46,6 +46,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("io.mockk:mockk:1.13.17")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("androidx.test:core:1.5.0")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -57,4 +61,5 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }

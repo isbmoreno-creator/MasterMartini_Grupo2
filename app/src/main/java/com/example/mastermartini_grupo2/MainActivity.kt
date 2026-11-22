@@ -20,6 +20,12 @@ import com.example.mastermartini_grupo2.ui.screens.MainScreen
 import com.example.mastermartini_grupo2.ui.screens.recipes.RecipeListScreen
 import com.example.mastermartini_grupo2.ui.screens.recipes.ProductListScreen
 import com.example.mastermartini_grupo2.ui.screens.recipes.ServiceListScreen
+import com.example.mastermartini_grupo2.ui.screens.recipes.AddProductScreen
+import com.example.mastermartini_grupo2.viewmodel.ProductViewModel
+import com.example.mastermartini_grupo2.model.Product
+import com.example.mastermartini_grupo2.ui.screens.recipes.EditProductScreen
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +45,7 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation() {
 
     val navController = rememberNavController()
+    val productViewModel: ProductViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -101,15 +108,20 @@ fun AppNavigation() {
                 }
             )
         }
-
-
-        composable("profile") {
+        composable(route = "profile") {
             ProfileScreen(
                 onPreferencesClick = {
                     navController.navigate("preferences")
                 },
                 onBackClick = {
                     navController.popBackStack()
+                },
+                onLogoutClick = {
+                    navController.navigate("login") {
+                        popUpTo("main") {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
@@ -121,15 +133,70 @@ fun AppNavigation() {
                 }
             )
         }
-
-        composable("products") {
-
+        composable(route = "products") {
             ProductListScreen(
-                onBackClick = {
-                    navController.popBackStack()
+                onBackClick = { navController.popBackStack() },
+                productViewModel = productViewModel,
+                onAddProductClick = { viewModel ->
+                    navController.navigate("addProduct")
+                },
+                onEditProductClick = { product ->
+                    navController.navigate("editProduct/${product.id}")
                 }
             )
         }
+
+        composable(route = "editProduct/{id}") { backStackEntry ->
+
+            val productId = backStackEntry.arguments
+                ?.getString("id")
+                ?.toIntOrNull()
+
+            val products by productViewModel.products.collectAsState()
+
+            val product = products
+                .firstOrNull { it.id == productId }
+
+            if (product != null) {
+                EditProductScreen(
+                    product = product,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onUpdateProduct = { updatedProduct ->
+                        productViewModel.updateProduct(
+                            updatedProduct.id,
+                            updatedProduct
+                        )
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }
+        composable(route = "addProduct") {
+            AddProductScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onAddProduct = { name, description, price, image ->
+
+                    val product = Product(
+                        id = 0,
+                        name = name,
+                        description = description,
+                        price = price,
+                        image = image
+                    )
+
+                    productViewModel.addProduct(product) {
+                        navController.popBackStack()
+                    }
+                }
+            )
+        }
+
+
+
 
         composable("services") {
             ServiceListScreen(
