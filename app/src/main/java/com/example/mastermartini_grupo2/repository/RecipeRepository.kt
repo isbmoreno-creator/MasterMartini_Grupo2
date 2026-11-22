@@ -1,3 +1,4 @@
+
 package com.example.mastermartini_grupo2.repository
 
 import android.content.Context
@@ -15,14 +16,19 @@ private val Context.recipeDataStore by preferencesDataStore(
     name = "recipe_preferences"
 )
 
-class RecipeRepository(private val context: Context) {
+class RecipeRepository(
+    private val dataStore: DataStore<Preferences>
+) {
+
+    constructor(context: Context) : this(context.recipeDataStore)
 
     companion object {
         private val RECIPES = stringPreferencesKey("recipes")
     }
 
+    // AGREGAR RECETA
     suspend fun addRecipe(recipe: Recipe) {
-        context.recipeDataStore.edit { preferences ->
+        dataStore.edit { preferences ->
 
             val jsonActual = preferences[RECIPES] ?: "[]"
             val recetasJson = JSONArray(jsonActual)
@@ -41,9 +47,10 @@ class RecipeRepository(private val context: Context) {
         }
     }
 
+    // OBTENER TODAS LAS RECETAS
     suspend fun getRecipes(): List<Recipe> {
 
-        val preferences = context.recipeDataStore.data.first()
+        val preferences = dataStore.data.first()
         val jsonActual = preferences[RECIPES] ?: "[]"
 
         val recetasJson = JSONArray(jsonActual)
@@ -69,8 +76,45 @@ class RecipeRepository(private val context: Context) {
         return recetas
     }
 
+    // EDITAR RECETA LOCAL
+    suspend fun updateRecipe(recipe: Recipe) {
+
+        dataStore.edit { preferences ->
+
+            val jsonActual = preferences[RECIPES] ?: "[]"
+            val recetasJson = JSONArray(jsonActual)
+            val recetasActualizadas = JSONArray()
+
+            for (i in 0 until recetasJson.length()) {
+
+                val receta = recetasJson.getJSONObject(i)
+
+                if (receta.getLong("id") == recipe.id) {
+
+                    val recetaActualizada = JSONObject().apply {
+                        put("id", recipe.id)
+                        put("name", recipe.name)
+                        put("description", recipe.description)
+                        put("estimatedTime", recipe.estimatedTime)
+                        put("imagePath", recipe.imagePath ?: "")
+                    }
+
+                    recetasActualizadas.put(recetaActualizada)
+
+                } else {
+
+                    recetasActualizadas.put(receta)
+                }
+            }
+
+            preferences[RECIPES] = recetasActualizadas.toString()
+        }
+    }
+
+    // ELIMINAR RECETA LOCAL
     suspend fun deleteRecipe(id: Long) {
-        context.recipeDataStore.edit { preferences ->
+
+        dataStore.edit { preferences ->
 
             val jsonActual = preferences[RECIPES] ?: "[]"
             val recetasJson = JSONArray(jsonActual)
@@ -89,3 +133,4 @@ class RecipeRepository(private val context: Context) {
         }
     }
 }
+
