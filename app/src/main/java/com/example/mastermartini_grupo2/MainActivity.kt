@@ -23,6 +23,8 @@ import com.example.mastermartini_grupo2.ui.screens.recipes.ServiceListScreen
 import com.example.mastermartini_grupo2.ui.screens.recipes.AddProductScreen
 import com.example.mastermartini_grupo2.viewmodel.ProductViewModel
 import com.example.mastermartini_grupo2.model.Product
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +45,7 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val productViewModel: ProductViewModel = viewModel()
+    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -114,10 +117,11 @@ fun AppNavigation() {
                     navController.popBackStack()
                 },
                 onLogoutClick = {
-                    navController.navigate("login") {
+                    navController.navigate("home") {
                         popUpTo("main") {
                             inclusive = true
                         }
+                        launchSingleTop = true
                     }
                 }
             )
@@ -156,6 +160,12 @@ fun AppNavigation() {
                     )
 
                     productViewModel.addProduct(product) {
+                        Toast.makeText(
+                            context,
+                            "Producto agregado correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         navController.popBackStack()
                     }
                 }
