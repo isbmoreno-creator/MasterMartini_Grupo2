@@ -1,132 +1,261 @@
-# Master Martini - Aplicación Móvil
+# 🍸 Master Martini Grupo 2
 
-## Descripción
+Aplicación móvil desarrollada para **Master Martini Chile SPA**, orientada a facilitar el acceso a productos y recetas desde una aplicación Android.
 
-Aplicación móvil desarrollada para el caso de Master Martini Chile SPA.
+El proyecto fue desarrollado utilizando **Kotlin, Jetpack Compose, Retrofit y APIs externas**, incorporando almacenamiento local, consumo de servicios REST, operaciones CRUD y pruebas unitarias.
 
-El proyecto busca entregar una plataforma móvil orientada a clientes y usuarios relacionados con el rubro de la panadería, pastelería, chocolate, heladería, restaurantes y servicios de alimentación.
+---
 
-La aplicación permite gestionar información del usuario y acceder a contenidos relacionados con productos, recetas y servicios de Master Martini.
+## 👥 Integrantes
 
-## Integrantes
+- **Katherin Moreno**
+- **Jhon Villegas**
 
-- Katherin Moreno
-- Jhon Villegas
+---
 
-## Funcionalidades
-
-### Gestión de usuarios
-
-- Registro de usuarios.
-- Validación de los datos ingresados.
-- Validación de correo electrónico.
-- Validación de teléfono.
-- Validación de RUT de empresa.
-- Mensajes visuales de validación.
-- Persistencia local de los datos del usuario.
-- Inicio de sesión.
-- Visualización del perfil.
-- Edición de preferencias del usuario.
-
-### Perfil de usuario
-
-- Visualización de los datos registrados.
-- Actualización de preferencias.
-- Captura de fotografía mediante la cámara del dispositivo.
-- Navegación entre las diferentes pantallas de la aplicación.
-
-### Recetas
-
-- Visualización de recetas almacenadas.
-- Búsqueda de recetas.
-- Visualización del detalle de una receta.
-- Agregar nuevas recetas.
-- Selección de fotografías para las recetas.
-- Persistencia local de las recetas.
-- Eliminación de recetas.
-
-### Productos y servicios
-
-- Visualización de productos relacionados con Master Martini.
-- Visualización de servicios ofrecidos.
-- Navegación entre las diferentes secciones de contenido.
-
-### Recursos del dispositivo
-
-- Acceso a la cámara del dispositivo.
-- Selección de imágenes desde el dispositivo para asociarlas a recetas.
-
-### Experiencia de usuario
-
-- Interfaz desarrollada con Jetpack Compose.
-- Navegación entre pantallas.
-- Mensajes de confirmación.
-- Animaciones para entregar retroalimentación al usuario.
-- Diseño visual basado en la identidad de Master Martini.
-- Interfaz organizada y adaptable al desplazamiento vertical.
-
-## Tecnologías utilizadas
+## 📱 Tecnologías utilizadas
 
 - Kotlin
 - Android Studio
 - Jetpack Compose
-- Navigation Compose
-- MVVM
+- Material 3
+- Retrofit
+- Gson
+- DummyJSON API
 - DataStore Preferences
-- Git
-- GitHub
+- Coroutines
+- JUnit
+- MockK
+- Robolectric
+- Git y GitHub
 
-## Arquitectura
+---
 
-El proyecto utiliza una estructura basada en MVVM, separando la interfaz de usuario, la lógica y el acceso a los datos.
+## ✨ Funcionalidades
+
+### 👤 Usuarios
+
+- Registro de usuario.
+- Inicio de sesión.
+- Validación de datos.
+- Almacenamiento local de información mediante DataStore.
+- Edición de información del usuario.
+- Cierre de sesión.
+- Gestión de contraseña.
+
+### 🛒 Productos
+
+- Visualización de productos obtenidos desde una API externa.
+- Consulta de productos mediante Retrofit.
+- Creación de productos mediante API.
+- Actualización de productos mediante API.
+- Eliminación de productos mediante API.
+- Visualización de información del producto.
+- Validación de datos al crear productos.
+
+### 🍰 Recetas
+
+- Exploración de recetas obtenidas desde una API externa.
+- Visualización del detalle de una receta.
+- Sección de recetas propias.
+- Creación de recetas propias.
+- Edición de recetas.
+- Eliminación de recetas.
+
+### 🧪 Pruebas unitarias
+
+El proyecto incorpora pruebas unitarias para validar la lógica de:
+
+- ProductViewModel
+- RecipeViewModel
+- UserViewModel
+- RecipeRepository
+- UserRepository
+
+Las pruebas utilizan **JUnit, MockK, Coroutines Test y Robolectric**.
+
+Actualmente se ejecutan **41 pruebas unitarias correctamente**.
+
+---
+
+## 🌐 API externa
+
+El proyecto utiliza **DummyJSON** como API externa.
+
+### Productos
+
+Base URL:
+
+`https://dummyjson.com/`
+
+Endpoints utilizados:
+
+| Método | Endpoint | Función |
+|---|---|---|
+| GET | `/products` | Obtener productos |
+| POST | `/products/add` | Crear producto |
+| PUT | `/products/{id}` | Actualizar producto |
+| DELETE | `/products/{id}` | Eliminar producto |
+
+### Recetas
+
+Base URL:
+
+`https://dummyjson.com/`
+
+La aplicación utiliza los endpoints de recetas proporcionados por DummyJSON para consultar y mostrar información de recetas.
+
+---
+
+## 🏗️ Arquitectura
+
+La aplicación se organiza utilizando una estructura basada en:
 
 ```text
-Model
-   ↓
+UI / Screens
+     ↓
 ViewModel
-   ↓
+     ↓
 Repository
-   ↓
-DataStore
+     ↓
+Retrofit / DataStore
+     ↓
+API externa / almacenamiento local
 ```
 
-Las pantallas de la aplicación se encuentran organizadas dentro del módulo de interfaz de usuario.
+### ViewModel
 
-## Persistencia de datos
+Los ViewModel administran el estado de la aplicación y contienen la lógica necesaria para comunicarse con los repositorios.
 
-La aplicación utiliza DataStore Preferences para almacenar localmente información del usuario y las recetas.
+### Repository
 
-Esto permite conservar los datos y recuperarlos posteriormente desde las diferentes funcionalidades de la aplicación.
+Los Repository se encargan de acceder a las fuentes de datos.
 
-## Recursos del dispositivo
+- `ProductRepository` → productos mediante Retrofit.
+- `RecipeRepository` → recetas y almacenamiento de recetas propias.
+- `UserRepository` → información del usuario mediante DataStore.
 
-La aplicación integra recursos del dispositivo móvil mediante:
+### Retrofit
 
-- Cámara: permite tomar una fotografía de perfil.
-- Selector de imágenes del dispositivo: permite seleccionar fotografías para asociarlas a las recetas.
+Retrofit permite realizar las solicitudes HTTP hacia la API externa y convertir las respuestas JSON a objetos Kotlin.
 
-Los permisos y accesos correspondientes se gestionan desde la aplicación antes de utilizar los recursos que lo requieren.
+### DataStore
 
-## Ejecución del proyecto
+DataStore se utiliza para almacenar localmente la información del usuario.
+
+---
+
+## 🧪 Pruebas y cobertura
+
+El proyecto cuenta con pruebas unitarias utilizando:
+
+- JUnit
+- MockK
+- Robolectric
+- Kotlin Coroutines Test
+
+Se realizaron pruebas sobre la lógica de los ViewModel y Repository, cubriendo los principales casos de funcionamiento y validación.
+
+**Total de pruebas ejecutadas: 41**
+
+Resultado:
+
+```text
+41 tests passed
+```
+
+La cobertura de la lógica evaluada en ViewModel y Repository supera el **80% requerido**.
+
+---
+
+## 🔐 APK firmado
+
+La aplicación cuenta con una versión **Release firmada**.
+
+Archivo generado:
+
+```text
+app-release.apk
+```
+
+La aplicación fue firmada utilizando un archivo de claves:
+
+```text
+mastermartini-release.jks
+```
+
+El APK corresponde a la versión Release de la aplicación y puede instalarse en dispositivos Android compatibles.
+
+---
+
+## ▶️ Ejecución del proyecto
 
 ### Requisitos
 
-- Android Studio.
-- JDK compatible con la versión del proyecto.
-- Emulador Android o dispositivo físico.
+- Android Studio
+- JDK 17
+- Android SDK
+- Dispositivo Android o emulador
+- Conexión a Internet para utilizar las APIs externas
 
 ### Pasos
 
-1. Clonar el repositorio desde GitHub.
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/isbmoreno-creator/MasterMartini_Grupo2.git
+```
+
 2. Abrir el proyecto en Android Studio.
+
 3. Esperar la sincronización de Gradle.
-4. Seleccionar un emulador o dispositivo Android.
-5. Ejecutar la aplicación.
 
-## Repositorio
+4. Seleccionar un dispositivo físico o emulador Android.
 
-El proyecto se encuentra alojado en GitHub y utiliza ramas para permitir el trabajo independiente de los integrantes del equipo.
+5. Ejecutar la aplicación desde Android Studio.
 
-## Nota
+---
 
-El proyecto corresponde a una implementación académica basada en el caso de Master Martini Chile SPA.
+## 📂 Estructura principal
+
+```text
+app/
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com.example.mastermartini_grupo2/
+    │   │       ├── api/
+    │   │       ├── model/
+    │   │       ├── repository/
+    │   │       ├── ui/
+    │   │       └── viewmodel/
+    │   │
+    │   └── AndroidManifest.xml
+    │
+    └── test/
+        └── java/
+            └── com.example.mastermartini_grupo2/
+                ├── ProductViewModelTest.kt
+                ├── RecipeRepositoryTest.kt
+                ├── RecipeViewModelTest.kt
+                ├── UserRepositoryTest.kt
+                └── UserViewModelTest.kt
+```
+
+---
+
+## 📌 Estado del proyecto
+
+- ✅ Interfaz móvil implementada.
+- ✅ Registro e inicio de sesión.
+- ✅ Gestión de productos.
+- ✅ Consumo de API externa mediante Retrofit.
+- ✅ Gestión de recetas.
+- ✅ Almacenamiento local mediante DataStore.
+- ✅ Operaciones CRUD.
+- ✅ Pruebas unitarias.
+- ✅ 41 pruebas ejecutadas correctamente.
+- ✅ APK Release generado.
+- ✅ APK firmado.
+- ✅ Keystore generado.
+- ✅ Proyecto gestionado mediante Git y GitHub.
